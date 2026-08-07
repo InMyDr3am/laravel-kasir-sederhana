@@ -12,7 +12,7 @@
     <aside class="sidebar">
         <div class="brand">
             Kasir
-            <small>{{ config('app.name') }}</small>
+            <small>{{ setting('store_name', config('app.name')) }}</small>
         </div>
 
         @php $isAdmin = auth()->user()->isAdmin(); @endphp
@@ -21,10 +21,13 @@
             <a href="{{ route('sales.create') }}" class="{{ request()->routeIs('sales.create') ? 'active' : '' }}">Penjualan</a>
             <a href="{{ route('reports.index') }}" class="{{ request()->routeIs('reports.*') ? 'active' : '' }}">Laporan</a>
 
+            <a href="{{ route('account.edit') }}" class="{{ request()->routeIs('account.*') ? 'active' : '' }}">Akun</a>
+
             @if ($isAdmin)
                 <div class="nav-label">Admin</div>
                 <a href="{{ route('products.index') }}" class="{{ request()->routeIs('products.*') ? 'active' : '' }}">Produk</a>
                 <a href="{{ route('users.index') }}" class="{{ request()->routeIs('users.*') ? 'active' : '' }}">User</a>
+                <a href="{{ route('settings.edit') }}" class="{{ request()->routeIs('settings.*') ? 'active' : '' }}">Pengaturan</a>
             @endif
         </nav>
 

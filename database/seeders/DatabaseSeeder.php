@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Product;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 
@@ -10,6 +11,13 @@ class DatabaseSeeder extends Seeder
 {
     public function run(): void
     {
+        Setting::putMany([
+            'store_name' => 'Kasir Sederhana',
+            'store_address' => 'Jl. Contoh No. 123, Kota',
+            'store_phone' => '0812-3456-7890',
+            'receipt_footer' => 'Terima kasih atas kunjungan Anda 🙏',
+        ]);
+
         User::updateOrCreate(
             ['email' => 'admin@kasir.test'],
             ['name' => 'Administrator', 'password' => 'password', 'role' => 'admin'],

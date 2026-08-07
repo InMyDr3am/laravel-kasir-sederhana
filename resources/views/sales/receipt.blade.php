@@ -13,8 +13,13 @@
 
     <div class="card pad receipt">
         <div class="rhead">
-            <strong style="font-size:18px">{{ config('app.name') }}</strong>
-            <div class="muted" style="font-size:12px">Struk Pembelian</div>
+            <strong style="font-size:18px">{{ setting('store_name', config('app.name')) }}</strong>
+            @if (setting('store_address'))
+                <div class="muted" style="font-size:12px">{{ setting('store_address') }}</div>
+            @endif
+            @if (setting('store_phone'))
+                <div class="muted" style="font-size:12px">{{ setting('store_phone') }}</div>
+            @endif
             @if ($sale->isCancelled())
                 <div class="badge low" style="margin-top:8px">DIBATALKAN</div>
             @endif
@@ -43,7 +48,7 @@
         <div class="rrow"><span class="muted">Bayar</span><span>{{ rupiah($sale->paid) }}</span></div>
         <div class="rrow"><span class="muted">Kembalian</span><span>{{ rupiah($sale->change) }}</span></div>
 
-        <div style="text-align:center;margin-top:16px" class="muted">Terima kasih 🙏</div>
+        <div style="text-align:center;margin-top:16px" class="muted">{{ setting('receipt_footer', 'Terima kasih 🙏') }}</div>
     </div>
 
     <div class="print-actions">
