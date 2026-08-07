@@ -51,7 +51,9 @@
 
                 <div class="field" style="margin-top:10px">
                     <label for="discount">Diskon (Rp)</label>
-                    <input class="input" type="number" min="0" id="discount" name="discount" value="0" oninput="render()">
+                    <input class="input" type="text" inputmode="numeric" id="discount" value="0"
+                           data-target="discountRaw" oninput="formatThousands(this); render()">
+                    <input type="hidden" name="discount" id="discountRaw" value="0">
                     @error('discount') <div class="error">{{ $message }}</div> @enderror
                 </div>
 
@@ -70,7 +72,9 @@
 
                 <div class="field">
                     <label for="paid">Uang Bayar (Rp)</label>
-                    <input class="input" type="number" min="0" id="paid" name="paid" value="0" oninput="renderChange()">
+                    <input class="input" type="text" inputmode="numeric" id="paid" value="0"
+                           data-target="paidRaw" oninput="formatThousands(this); renderChange()">
+                    <input type="hidden" name="paid" id="paidRaw" value="0">
                 </div>
                 <div class="totals" style="margin-top:0;border-top:none;padding-top:0">
                     <div class="line"><span>Kembalian</span><span id="changeView">Rp 0</span></div>
@@ -149,7 +153,7 @@ function render() {
         i++;
     }
 
-    let discount = parseInt(document.getElementById('discount').value || '0', 10);
+    let discount = parseInt(document.getElementById('discountRaw').value || '0', 10);
     if (discount < 0) discount = 0;
     if (discount > total) discount = total; // diskon tak boleh > subtotal
     const grand = total - discount;
@@ -173,13 +177,18 @@ function syncPaidForMethod() {
     if (method === 'tunai') {
         paid.readOnly = false;
     } else {
-        paid.value = window._total || 0;
+        setPaid(window._total || 0);
         paid.readOnly = true;
     }
 }
 
+function setPaid(n) {
+    document.getElementById('paidRaw').value = n;
+    document.getElementById('paid').value = Number(n).toLocaleString('id-ID');
+}
+
 function renderChange() {
-    const paid = parseInt(document.getElementById('paid').value || '0', 10);
+    const paid = parseInt(document.getElementById('paidRaw').value || '0', 10);
     const change = paid - (window._total || 0);
     const el = document.getElementById('changeView');
     el.textContent = formatRp(change);
