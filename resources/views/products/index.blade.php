@@ -35,7 +35,7 @@
                         <td><strong>{{ $product->name }}</strong></td>
                         <td>{{ $product->category ?: '—' }}</td>
                         <td class="num">{{ rupiah($product->price) }}</td>
-                        <td class="num">{{ $product->stock }}</td>
+                        <td class="num">{{ number_format($product->stock, 0, ',', '.') }}</td>
                         <td>
                             @if ($product->is_active)
                                 <span class="badge">Aktif</span>
