@@ -41,13 +41,33 @@
                 <div class="cart-empty" id="cartEmpty">Keranjang kosong</div>
             </div>
 
-            <div class="totals">
-                <div class="line grand"><span>Total</span><span id="grandTotal">Rp 0</span></div>
-            </div>
-
-            <form method="POST" action="{{ route('sales.store') }}" id="checkoutForm" style="margin-top:14px">
+            <form method="POST" action="{{ route('sales.store') }}" id="checkoutForm" style="margin-top:6px">
                 @csrf
                 <div id="itemInputs"></div>
+
+                <div class="totals" style="margin-top:0;border-top:1px solid var(--line)">
+                    <div class="line"><span class="muted">Subtotal</span><span id="subtotalView">Rp 0</span></div>
+                </div>
+
+                <div class="field" style="margin-top:10px">
+                    <label for="discount">Diskon (Rp)</label>
+                    <input class="input" type="number" min="0" id="discount" name="discount" value="0" oninput="render()">
+                    @error('discount') <div class="error">{{ $message }}</div> @enderror
+                </div>
+
+                <div class="totals" style="margin-top:0">
+                    <div class="line grand"><span>Total</span><span id="grandTotal">Rp 0</span></div>
+                </div>
+
+                <div class="field" style="margin-top:10px">
+                    <label for="payment_method">Metode Bayar</label>
+                    <select id="payment_method" name="payment_method" onchange="onMethodChange()">
+                        <option value="tunai">Tunai</option>
+                        <option value="qris">QRIS</option>
+                        <option value="transfer">Transfer</option>
+                    </select>
+                </div>
+
                 <div class="field">
                     <label for="paid">Uang Bayar (Rp)</label>
                     <input class="input" type="number" min="0" id="paid" name="paid" value="0" oninput="renderChange()">
@@ -129,10 +149,33 @@ function render() {
         i++;
     }
 
-    document.getElementById('grandTotal').textContent = formatRp(total);
+    let discount = parseInt(document.getElementById('discount').value || '0', 10);
+    if (discount < 0) discount = 0;
+    if (discount > total) discount = total; // diskon tak boleh > subtotal
+    const grand = total - discount;
+
+    document.getElementById('subtotalView').textContent = formatRp(total);
+    document.getElementById('grandTotal').textContent = formatRp(grand);
     document.getElementById('payBtn').disabled = cart.size === 0;
-    window._total = total;
+    window._subtotal = total;
+    window._total = grand;
+
+    syncPaidForMethod();
     renderChange();
+}
+
+// Untuk non-tunai (QRIS/Transfer), uang bayar = total pas & tak bisa diubah.
+function onMethodChange() { syncPaidForMethod(); renderChange(); }
+
+function syncPaidForMethod() {
+    const method = document.getElementById('payment_method').value;
+    const paid = document.getElementById('paid');
+    if (method === 'tunai') {
+        paid.readOnly = false;
+    } else {
+        paid.value = window._total || 0;
+        paid.readOnly = true;
+    }
 }
 
 function renderChange() {

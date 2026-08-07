@@ -15,10 +15,10 @@ class SaleService
      * @param  array<int, array{product_id:int, qty:int}>  $items
      * @throws ValidationException
      */
-    public function checkout(array $items, int $paid, int $userId): Sale
+    public function checkout(array $items, int $paid, int $userId, int $discount = 0, string $paymentMethod = 'tunai'): Sale
     {
-        return DB::transaction(function () use ($items, $paid, $userId) {
-            $total = 0;
+        return DB::transaction(function () use ($items, $paid, $userId, $discount, $paymentMethod) {
+            $subtotal = 0;
             $lines = [];
 
             foreach ($items as $item) {
@@ -37,15 +37,23 @@ class SaleService
                     ]);
                 }
 
-                $subtotal = $product->price * $item['qty'];
-                $total += $subtotal;
+                $lineSubtotal = $product->price * $item['qty'];
+                $subtotal += $lineSubtotal;
 
                 $lines[] = [
                     'product' => $product,
                     'qty' => $item['qty'],
-                    'subtotal' => $subtotal,
+                    'subtotal' => $lineSubtotal,
                 ];
             }
+
+            if ($discount > $subtotal) {
+                throw ValidationException::withMessages([
+                    'discount' => 'Diskon tidak boleh melebihi subtotal.',
+                ]);
+            }
+
+            $total = $subtotal - $discount;
 
             if ($paid < $total) {
                 throw ValidationException::withMessages([
@@ -56,7 +64,10 @@ class SaleService
             $sale = Sale::create([
                 'invoice_no' => $this->generateInvoiceNo(),
                 'user_id' => $userId,
+                'subtotal' => $subtotal,
+                'discount' => $discount,
                 'total' => $total,
+                'payment_method' => $paymentMethod,
                 'paid' => $paid,
                 'change' => $paid - $total,
             ]);
@@ -76,6 +87,29 @@ class SaleService
             }
 
             return $sale;
+        });
+    }
+
+    /**
+     * Batalkan transaksi: kembalikan stok tiap item lalu tandai batal.
+     *
+     * @throws ValidationException
+     */
+    public function void(Sale $sale): void
+    {
+        if ($sale->isCancelled()) {
+            throw ValidationException::withMessages([
+                'sale' => 'Transaksi ini sudah dibatalkan.',
+            ]);
+        }
+
+        DB::transaction(function () use ($sale) {
+            foreach ($sale->items as $item) {
+                // withTrashed: produk bisa saja sudah dihapus (soft delete).
+                Product::withTrashed()->find($item->product_id)?->increment('stock', $item->qty);
+            }
+
+            $sale->update(['status' => 'batal']);
         });
     }
 

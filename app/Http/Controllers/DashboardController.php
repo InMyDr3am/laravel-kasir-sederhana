@@ -12,7 +12,7 @@ class DashboardController extends Controller
     {
         $today = today();
 
-        $salesToday = Sale::whereDate('created_at', $today);
+        $salesToday = Sale::completed()->whereDate('created_at', $today);
 
         return view('dashboard', [
             'revenueToday' => (int) (clone $salesToday)->sum('total'),

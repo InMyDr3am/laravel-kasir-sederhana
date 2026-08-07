@@ -20,7 +20,8 @@ class ReportController extends Controller
 
         $sales = $query->paginate(15)->withQueryString();
 
-        $summary = Sale::whereDate('created_at', '>=', $from)
+        $summary = Sale::completed()
+            ->whereDate('created_at', '>=', $from)
             ->whereDate('created_at', '<=', $to)
             ->selectRaw('COUNT(*) as count, COALESCE(SUM(total), 0) as revenue')
             ->first();

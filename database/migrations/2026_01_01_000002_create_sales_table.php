@@ -12,7 +12,11 @@ return new class extends Migration
             $table->id();
             $table->string('invoice_no')->unique();
             $table->foreignId('user_id')->constrained()->restrictOnDelete();
+            $table->unsignedInteger('subtotal');
+            $table->unsignedInteger('discount')->default(0);
             $table->unsignedInteger('total');
+            $table->enum('payment_method', ['tunai', 'qris', 'transfer'])->default('tunai');
+            $table->enum('status', ['selesai', 'batal'])->default('selesai');
             $table->unsignedInteger('paid');
             $table->unsignedInteger('change');
             $table->timestamps();

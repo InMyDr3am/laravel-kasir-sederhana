@@ -41,21 +41,32 @@
                     <th>Invoice</th>
                     <th>Tanggal</th>
                     <th>Kasir</th>
+                    <th>Metode</th>
                     <th class="num">Total</th>
                     <th></th>
                 </tr>
             </thead>
             <tbody>
                 @forelse ($sales as $sale)
-                    <tr>
-                        <td><strong>{{ $sale->invoice_no }}</strong></td>
+                    <tr @if ($sale->isCancelled()) style="opacity:.55" @endif>
+                        <td>
+                            <strong>{{ $sale->invoice_no }}</strong>
+                            @if ($sale->isCancelled()) <span class="badge low">Batal</span> @endif
+                        </td>
                         <td>{{ $sale->created_at->format('d/m/Y H:i') }}</td>
                         <td>{{ $sale->cashier->name }}</td>
-                        <td class="num">{{ rupiah($sale->total) }}</td>
+                        <td><span class="badge">{{ $sale->paymentLabel() }}</span></td>
+                        <td class="num">
+                            @if ($sale->isCancelled())
+                                <s>{{ rupiah($sale->total) }}</s>
+                            @else
+                                {{ rupiah($sale->total) }}
+                            @endif
+                        </td>
                         <td class="right"><a href="{{ route('sales.show', $sale) }}" class="btn ghost sm">Struk</a></td>
                     </tr>
                 @empty
-                    <tr><td colspan="5" class="muted" style="text-align:center;padding:30px">Tidak ada transaksi pada periode ini.</td></tr>
+                    <tr><td colspan="6" class="muted" style="text-align:center;padding:30px">Tidak ada transaksi pada periode ini.</td></tr>
                 @endforelse
             </tbody>
         </table>

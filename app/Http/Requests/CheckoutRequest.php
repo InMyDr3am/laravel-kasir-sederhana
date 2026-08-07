@@ -17,6 +17,8 @@ class CheckoutRequest extends FormRequest
             'items' => ['required', 'array', 'min:1'],
             'items.*.product_id' => ['required', 'integer', 'exists:products,id'],
             'items.*.qty' => ['required', 'integer', 'min:1'],
+            'discount' => ['nullable', 'integer', 'min:0'],
+            'payment_method' => ['required', 'in:tunai,qris,transfer'],
             'paid' => ['required', 'integer', 'min:0'],
         ];
     }
