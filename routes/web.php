@@ -27,6 +27,7 @@ Route::middleware('auth')->group(function () {
     Route::post('sales/{sale}/void', [SaleController::class, 'void'])->name('sales.void');
 
     Route::get('reports', [ReportController::class, 'index'])->name('reports.index');
+    Route::get('reports/export', [ReportController::class, 'export'])->name('reports.export');
 
     // Manajemen produk & user — khusus admin.
     Route::middleware('admin')->group(function () {

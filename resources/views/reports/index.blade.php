@@ -7,6 +7,7 @@
             <h1>Laporan Penjualan</h1>
             <div class="sub">Rekap transaksi per periode</div>
         </div>
+        <a href="{{ route('reports.export', ['from' => $from, 'to' => $to]) }}" class="btn ghost">⬇ Export CSV</a>
     </div>
 
     <form method="GET" class="card pad" style="margin-bottom:20px">
@@ -31,6 +32,48 @@
         <div class="stat">
             <div class="k">Jumlah Transaksi</div>
             <div class="v">{{ $count }}</div>
+        </div>
+    </div>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr;margin-bottom:20px">
+        <div class="card pad">
+            <h3 style="margin-bottom:10px">Produk Terlaris</h3>
+            <table>
+                <thead>
+                    <tr><th>Produk</th><th class="num">Terjual</th><th class="num">Omzet</th></tr>
+                </thead>
+                <tbody>
+                    @forelse ($topProducts as $p)
+                        <tr>
+                            <td><strong>{{ $p->name }}</strong></td>
+                            <td class="num">{{ $p->qty }}</td>
+                            <td class="num">{{ rupiah($p->revenue) }}</td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="3" class="muted" style="text-align:center;padding:20px">Belum ada penjualan.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+
+        <div class="card pad">
+            <h3 style="margin-bottom:10px">Rekap per Kasir</h3>
+            <table>
+                <thead>
+                    <tr><th>Kasir</th><th class="num">Transaksi</th><th class="num">Omzet</th></tr>
+                </thead>
+                <tbody>
+                    @forelse ($cashierRecap as $row)
+                        <tr>
+                            <td><strong>{{ $row->cashier?->name ?? '—' }}</strong></td>
+                            <td class="num">{{ $row->count }}</td>
+                            <td class="num">{{ rupiah($row->revenue) }}</td>
+                        </tr>
+                    @empty
+                        <tr><td colspan="3" class="muted" style="text-align:center;padding:20px">Belum ada penjualan.</td></tr>
+                    @endforelse
+                </tbody>
+            </table>
         </div>
     </div>
 
