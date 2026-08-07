@@ -64,6 +64,13 @@
         m?.classList.remove('open');
         document.body.style.overflow = '';
     }
+    // Format ribuan pada input teks; angka mentah ditulis ke hidden input (data-target).
+    function formatThousands(el) {
+        const raw = el.value.replace(/\D/g, '');
+        const hidden = document.getElementById(el.dataset.target);
+        if (hidden) hidden.value = raw;
+        el.value = raw ? Number(raw).toLocaleString('id-ID') : '';
+    }
     document.addEventListener('click', e => { if (e.target.classList.contains('modal-backdrop')) closeModal(e.target); });
     document.addEventListener('keydown', e => {
         if (e.key !== 'Escape') return;

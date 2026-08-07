@@ -36,8 +36,12 @@
 
                 <div class="form-grid">
                     <div class="field">
+                        @php $priceVal = $val('price', $product->price); @endphp
                         <label>Harga (Rp)</label>
-                        <input class="input" type="number" min="0" name="price" value="{{ $val('price', $product->price) }}" required>
+                        <input class="input" type="text" inputmode="numeric" required
+                               value="{{ ($priceVal !== null && $priceVal !== '') ? number_format((int) $priceVal, 0, ',', '.') : '' }}"
+                               oninput="formatThousands(this)" data-target="price-{{ $modalId }}">
+                        <input type="hidden" name="price" id="price-{{ $modalId }}" value="{{ $priceVal }}">
                         @if ($isErr) @error('price') <div class="error">{{ $message }}</div> @enderror @endif
                     </div>
                     <div class="field">
