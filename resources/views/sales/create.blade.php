@@ -27,7 +27,7 @@
                         <div class="pn">{{ $p->name }}</div>
                         <div class="pc">{{ $p->category ?: $p->sku }}</div>
                         <div class="pp">{{ rupiah($p->price) }}</div>
-                        <div class="ps">Stok {{ $p->stock }}</div>
+                        <div class="ps">Stok {{ number_format($p->stock, 0, ',', '.') }}</div>
                     </button>
                 @empty
                     <p class="muted">Tidak ada produk siap jual (cek stok / status aktif).</p>

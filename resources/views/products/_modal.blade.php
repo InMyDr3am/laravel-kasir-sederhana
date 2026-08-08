@@ -45,8 +45,12 @@
                         @if ($isErr) @error('price') <div class="error">{{ $message }}</div> @enderror @endif
                     </div>
                     <div class="field">
+                        @php $stockVal = $val('stock', $product->stock ?? 0); @endphp
                         <label>Stok</label>
-                        <input class="input" type="number" min="0" name="stock" value="{{ $val('stock', $product->stock ?? 0) }}" required>
+                        <input class="input" type="text" inputmode="numeric" required
+                               value="{{ ($stockVal !== null && $stockVal !== '') ? number_format((int) $stockVal, 0, ',', '.') : '' }}"
+                               oninput="formatThousands(this)" data-target="stock-{{ $modalId }}">
+                        <input type="hidden" name="stock" id="stock-{{ $modalId }}" value="{{ $stockVal }}">
                         @if ($isErr) @error('stock') <div class="error">{{ $message }}</div> @enderror @endif
                     </div>
                 </div>

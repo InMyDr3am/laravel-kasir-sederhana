@@ -52,7 +52,7 @@
                         <strong>{{ $product->name }}</strong>
                         <div class="muted" style="font-size:12px">{{ $product->sku }}</div>
                     </div>
-                    <span class="badge low">Sisa {{ $product->stock }}</span>
+                    <span class="badge low">Sisa {{ number_format($product->stock, 0, ',', '.') }}</span>
                 </div>
             @empty
                 <p class="muted">Semua stok aman.</p>
