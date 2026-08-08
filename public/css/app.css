@@ -131,7 +131,18 @@ tbody tr:hover { background: #fafafa; }
 .right { text-align: right; }
 .between { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .row-actions { display: flex; gap: 8px; justify-content: flex-end; }
-.pagination { display: flex; gap: 4px; margin-top: 18px; flex-wrap: wrap; }
+.pagination { margin-top: 18px; }
+.pager { display: flex; flex-wrap: wrap; gap: 6px; }
+.pager-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: 38px; padding: 7px 12px;
+    border: 1px solid var(--line-strong); border-radius: 8px;
+    font-size: 14px; font-weight: 500; color: var(--ink); background: #fff;
+    transition: border-color .15s, background .15s;
+}
+a.pager-btn:hover { border-color: var(--ink); }
+.pager-btn.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.pager-btn.disabled { color: var(--muted); background: transparent; border-color: var(--line); cursor: default; }
 
 /* ---------- Auth ---------- */
 .auth-wrap { min-height: 100vh; display: grid; place-items: center; padding: 20px; background: var(--sidebar); }
