@@ -12,17 +12,22 @@ class ProductController extends Controller
 {
     public function index(Request $request): View
     {
+        // Allowlist kolom yang boleh disortir (cegah SQL injection lewat query string).
+        $sortable = ['sku', 'name', 'price', 'stock'];
+        $sort = in_array($request->get('sort'), $sortable, true) ? $request->get('sort') : 'name';
+        $direction = $request->get('direction') === 'desc' ? 'desc' : 'asc';
+
         $products = Product::query()
             ->when($request->string('q')->trim(), function ($query, $q) {
                 $query->where(fn ($sub) => $sub
                     ->where('name', 'like', "%{$q}%")
                     ->orWhere('sku', 'like', "%{$q}%"));
             })
-            ->orderBy('name')
+            ->orderBy($sort, $direction)
             ->paginate(12)
             ->withQueryString();
 
-        return view('products.index', compact('products'));
+        return view('products.index', compact('products', 'sort', 'direction'));
     }
 
     public function store(ProductRequest $request): RedirectResponse

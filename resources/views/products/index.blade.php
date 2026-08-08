@@ -17,13 +17,21 @@
 
     <div class="card">
         <table>
+            @php
+                $sortUrl = fn ($col) => request()->fullUrlWithQuery([
+                    'sort' => $col,
+                    'direction' => ($sort === $col && $direction === 'asc') ? 'desc' : 'asc',
+                    'page' => 1,
+                ]);
+                $arrow = fn ($col) => $sort === $col ? ($direction === 'asc' ? '↑' : '↓') : '';
+            @endphp
             <thead>
                 <tr>
-                    <th>SKU</th>
-                    <th>Nama</th>
+                    <th><a class="th-sort" href="{{ $sortUrl('sku') }}">SKU <span class="th-arrow">{{ $arrow('sku') }}</span></a></th>
+                    <th><a class="th-sort" href="{{ $sortUrl('name') }}">Nama <span class="th-arrow">{{ $arrow('name') }}</span></a></th>
                     <th>Kategori</th>
-                    <th class="num">Harga</th>
-                    <th class="num">Stok</th>
+                    <th class="num"><a class="th-sort" href="{{ $sortUrl('price') }}"><span class="th-arrow">{{ $arrow('price') }}</span> Harga</a></th>
+                    <th class="num"><a class="th-sort" href="{{ $sortUrl('stock') }}"><span class="th-arrow">{{ $arrow('stock') }}</span> Stok</a></th>
                     <th>Status</th>
                     <th></th>
                 </tr>

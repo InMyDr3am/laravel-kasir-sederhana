@@ -103,6 +103,10 @@ th { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: v
 tbody tr:last-child td { border-bottom: none; }
 tbody tr:hover { background: #fafafa; }
 .num { text-align: right; font-variant-numeric: tabular-nums; }
+th a.th-sort { color: inherit; display: inline-flex; align-items: center; gap: 4px; }
+th a.th-sort:hover { color: var(--ink); }
+.num a.th-sort { justify-content: flex-end; }
+.th-arrow { font-size: 11px; }
 
 /* ---------- Forms ---------- */
 .field { margin-bottom: 16px; }
