@@ -1,66 +1,164 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Kasir Sederhana
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Aplikasi kasir (POS) sederhana berbasis **Laravel 11 murni** dengan tampilan **monochrome** yang bersih dan ringan. Dibuat tanpa framework front-end/build step — cukup PHP, MySQL, dan browser.
 
-## About Laravel
+---
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## ✨ Fitur
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- **Autentikasi & Role** — login dengan dua peran: **admin** dan **kasir**.
+- **Dashboard** — omzet & jumlah transaksi hari ini, produk aktif, transaksi terakhir, stok menipis.
+- **Produk** (admin) — CRUD lewat modal, pencarian, **sort** kolom (SKU/Nama/Harga/Stok), pagination, dan **soft delete** (riwayat penjualan tetap aman).
+- **Penjualan / POS** — keranjang real-time, **diskon** per transaksi, **metode pembayaran** (Tunai/QRIS/Transfer), hitung kembalian, cetak struk.
+- **Batal transaksi** — void mengembalikan stok & dikecualikan dari omzet (otorisasi admin / kasir pemilik).
+- **Laporan** — filter periode, ringkasan omzet, **produk terlaris**, **rekap per kasir**, dan **export CSV**.
+- **User** (admin) — kelola akun admin & kasir.
+- **Akun** — setiap user bisa mengganti passwordnya sendiri.
+- **Pengaturan Toko** (admin) — nama, alamat, telepon, catatan kaki struk (tampil di struk).
+- **Format ribuan** otomatis pada semua input & tampilan nominal (harga, diskon, bayar, stok).
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## 🧰 Tech Stack
 
-## Learning Laravel
+- **Laravel 11** (PHP 8.2+)
+- **Blade** + **CSS statis** monochrome (tanpa Vite/Tailwind/Node)
+- **MySQL / MariaDB**
+- Sedikit **vanilla JavaScript** untuk keranjang POS & format input
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+---
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## 📋 Prasyarat
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Pastikan sudah terpasang di laptop:
 
-## Laravel Sponsors
+- **PHP 8.2+** & **Composer**
+- **MySQL / MariaDB** (paling mudah lewat **XAMPP**)
+- **Git**
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Cek versi:
 
-### Premium Partners
+```bash
+php -v
+composer -V
+git --version
+```
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+---
 
-## Contributing
+## 🚀 Cara Setup Setelah Clone
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+### 1. Clone repository
 
-## Code of Conduct
+```bash
+git clone https://github.com/InMyDr3am/laravel-kasir-sederhana.git
+cd laravel-kasir-sederhana
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 2. Install dependency PHP
 
-## Security Vulnerabilities
+```bash
+composer install
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3. Siapkan file `.env`
 
-## License
+```bash
+cp .env.example .env
+```
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+> Windows PowerShell: `Copy-Item .env.example .env`
+
+Template `.env.example` sudah dikonfigurasi untuk MySQL dengan database `kasir_sederhana`. Jika MySQL kamu memakai password root, sesuaikan baris `DB_PASSWORD=` di `.env`.
+
+### 4. Generate application key
+
+```bash
+php artisan key:generate
+```
+
+### 5. Nyalakan MySQL & buat database
+
+Nyalakan MySQL (di XAMPP: **Start** pada baris MySQL), lalu buat database:
+
+```bash
+mysql -u root -e "CREATE DATABASE kasir_sederhana CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+```
+
+> Jika perintah `mysql` tidak dikenali, gunakan path XAMPP:
+> `C:\xampp\mysql\bin\mysql -u root -e "..."` — atau buat database `kasir_sederhana` lewat **phpMyAdmin** (`http://localhost/phpmyadmin`).
+
+### 6. Migrasi database + load data awal (seed)
+
+```bash
+php artisan migrate --seed
+```
+
+Perintah ini membuat seluruh tabel **dan** mengisi data awal: 2 akun, 30 produk contoh, dan pengaturan toko default.
+
+### 7. Jalankan aplikasi
+
+```bash
+php artisan serve
+```
+
+Buka di browser: **http://127.0.0.1:8000**
+
+---
+
+## 👤 Akun Demo
+
+| Role  | Email               | Password   |
+| ----- | ------------------- | ---------- |
+| Admin | `admin@kasir.test`  | `password` |
+| Kasir | `kasir@kasir.test`  | `password` |
+
+- **Admin**: akses penuh (Produk, User, Pengaturan) + semua fitur kasir.
+- **Kasir**: Penjualan (POS), Laporan, dan Akun (ganti password sendiri).
+
+> ⚠️ Password default hanya untuk demo. Ganti lewat menu **Akun** setelah login, atau ubah daftar akun di `database/seeders/DatabaseSeeder.php`.
+
+---
+
+## ⚡ Ringkas (copy-paste berurutan)
+
+```bash
+git clone https://github.com/InMyDr3am/laravel-kasir-sederhana.git
+cd laravel-kasir-sederhana
+composer install
+cp .env.example .env
+php artisan key:generate
+mysql -u root -e "CREATE DATABASE kasir_sederhana CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+php artisan migrate --seed
+php artisan serve
+```
+
+---
+
+## 🔧 Catatan & Troubleshooting
+
+- **Tidak perlu `npm install`** — tampilan memakai CSS statis (`public/css/app.css`), tanpa build step.
+- **Reset data ke kondisi awal** (hapus semua transaksi & kembalikan seed):
+  ```bash
+  php artisan migrate:fresh --seed
+  ```
+- **Error `Access denied for user 'root'`** → sesuaikan `DB_USERNAME` / `DB_PASSWORD` di `.env` dengan MySQL kamu.
+- **Error `Unknown database 'kasir_sederhana'`** → langkah 5 belum dijalankan atau MySQL belum menyala.
+- **Setelah mengubah `.env`** → jalankan `php artisan config:clear`.
+- **Port 8000 dipakai** → jalankan di port lain: `php artisan serve --port=8080`.
+
+---
+
+## 📁 Struktur Singkat
+
+```
+app/
+  Http/Controllers/   # Dashboard, Product, Sale, Report, User, Account, StoreSetting, Auth
+  Http/Requests/      # Validasi form (Product, User, Checkout)
+  Models/             # User, Product, Sale, SaleItem, Setting
+  Services/           # SaleService — logika transaksi & void (DB transaction)
+database/
+  migrations/         # Skema tabel
+  seeders/            # Data awal (akun, produk, pengaturan)
+resources/views/      # Blade: layout, auth, dashboard, products, sales, reports, users, account, settings
+public/css/app.css    # Styling monochrome
+routes/web.php        # Definisi rute
+```
